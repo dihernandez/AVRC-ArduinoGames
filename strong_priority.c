@@ -24,7 +24,7 @@ void setup(){
     DDRD &= ~(1 << PD2); 
 }
 
-void flipSwitch() {
+void checkSwitch() {
     //read pot input
     //if potInput > 2.5V set interrupted to true
     if(PIND & (1<<PD2)) {
@@ -79,10 +79,10 @@ void blinkLED(enum LEDS led){
 
 void runScheduler(){
     while(!interrupted) {
+        checkSwitch();
         blinkLED(RED);
         blinkLED(YELLOW);
         blinkLED(GREEN);
-        //soundBuzzer();
     }
     soundBuzzer();
     _delay_ms(DELAY_TIME);
