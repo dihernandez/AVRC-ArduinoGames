@@ -1,9 +1,11 @@
 /* This is an attempt to implement a hard priority system for interacting with a microcontroller
  * learning about using interrupts with atmega328p (arduino uno)
  * */
+//#include <strong_priority.h>
 #include <stdbool.h>
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdio.h>
 
 short RED_PIN, YELLOW_PIN, GREEN_PIN, BUZZER_PIN;
 const int DELAY_TIME = 300;
@@ -19,17 +21,22 @@ void setup(){
     DDRB |= _BV(GREEN_PIN); 
     DDRB |= _BV(BUZZER_PIN);
     //set pot as input
-    //PRB &= _BV(DDB2); //pot pin
+    DDRD &= ~(1 << PD2); 
 }
 
 void flipSwitch() {
     //read pot input
-    //if potInput > 2.5V
-    //  interrupt
+    //if potInput > 2.5V set interrupted to true
+    if(PIND & (1<<PD2)) {
+        interrupted = true;
+    }
 }
 
 void soundBuzzer() {
-    
+    PORTB |= _BV(PORTB4);
+    _delay_ms(DELAY_TIME);
+    PORTB &= ~_BV(PORTB4);
+    _delay_ms(DELAY_TIME); 
 };
 
 
@@ -45,8 +52,6 @@ void blinkYelloLED() {
     _delay_ms(DELAY_TIME);
     PORTB &= ~_BV(PORTB2);
     _delay_ms(DELAY_TIME);
-
-
 }
 
 void  blinkGreenLED() {
@@ -77,6 +82,7 @@ void runScheduler(){
         blinkLED(RED);
         blinkLED(YELLOW);
         blinkLED(GREEN);
+        //soundBuzzer();
     }
     soundBuzzer();
     _delay_ms(DELAY_TIME);
