@@ -1,4 +1,4 @@
-// This will blink pin 13 5 times for one second each, then take a 5 second delay, then repeat
+// This will blink pin 13 1 time for one second then 2 times for 2 seconds, on until 5 seconds, then repeat
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdio.h>
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     int delay = 0; 
     DDRB |= ((1 << DDB5));
      
-    for(delay = 0; delay < 5000; delay += 500) {
+    for(delay = 1000; delay < 6000; delay += 500) {
        PORTB ^= (( 1 << PB5)); 
        delay_ms(delay);
     }
